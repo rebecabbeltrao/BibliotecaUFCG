@@ -1,5 +1,9 @@
-cadastra:: String -> [String]
-cadastra filme = [filme]
+cadastra:: String -> String -> String -> IO()
+cadastra nome autor editora = do
+ appendFile "titulos.txt" (nome++ "*")
+ appendFile "autores.txt" (autor ++ "*")
+ appendFile "editora.txt" (editora ++ "*")
+
 
 remove :: String -> Bool
 remove livro = True
@@ -9,13 +13,15 @@ avalia nome nota = "aa"
 
 
 main = do 
-
+     print "PUTA"
      op <- getLine
      if (op == "1") then do
          putStrLn "CADASTRO DE LIVRO - Digite o nome do filme que deseja cadastrar:"
          nome <- getLine
-         let resposta = cadastra nome
-         print resposta
+         autor<- getLine
+         editora <- getLine
+         cadastra nome autor editora
+         
      else if( op == "2") then do
          putStrLn "REMOÇÃO DE LIVRO - Digite o nome do filme que deseja remover:"
          nome <- getLine
@@ -34,5 +40,7 @@ main = do
          let o = avalia nome (read nota)
          print o          
      else do
+           a <- readFile "autores.txt"
+           print a
            putStrLn "BUSCA DE LIVRO - Digite nome do filme a ser procurado:"
-		   
+     main
