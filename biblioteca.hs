@@ -1,21 +1,48 @@
 cadastra:: String -> String -> String -> IO()
-cadastra nome autor editora = do
+cadastra nome autor editora alugado = do
  appendFile "titulos.txt" (nome++ ",")
  appendFile "autores.txt" (autor ++ ",")
  appendFile "editora.txt" (editora ++ ",")
+ appendFile "alugados.txt" (alugado ++ "N")
 
 
+listagemLivros = do
+   nomeLivro <- readFile "titulos.txt"
+   if(length nomeLivro == 0) then do
+	  putStrLn "Livro Inexistente ou não cadastrado"
+   else do
+	  (a:as) <- readFile ("titulos.txt")
+	  (b:bs) <- readFile ("autores.txt")
+	  (c:cs) <- readFile ("editora.txt")
+	  (d:ds) <- readFile ("alugados.txt")
+
+	  let (nomeLivro:outrosLivros) = listaLivros(a:as) "" []
+	  let (autor:outroAutores) = listaLivros (b:bs) "" []
+	  let (editora:outraEditora) = listaLivros(c:cs) "" []
+	  let (alugados: maisAlugados) = listaLivros(d:ds) "" []
+	  imprime (nomeLivro:outrosLivros) (autor:outroAutores) (editora:outraEditora) (alugados: maisAlugados)
+
+imprime:: [String] -> [String] -> [String]-> [String] -> IO()
+imprime [""] [""] [""] [""] = putStrLn ("Listagem Encerrada")
+imprime (livro:outrosLivros) (autor:outroAutores) (editora:outraEditora) (alugados:maisAlugados) = do
+   if(alugados == "N") then do
+      imprime outrosLivros outroAutores outraEditora maisAlugados
+   else do
+      putStrLn ("Nome Livro: " ++ livro)
+      putStrLn ("Autor: " ++ autor)
+      putStrLn ("Editora: " ++ editora)
+      imprime outrosLivros outroAutores outraEditora maisAlugados
+      
 listaLivros:: String -> String -> [String] -> [String]
 listaLivros [] nome [] = []
 listaLivros [] nome lista = lista ++ [nome]
 listaLivros (x:xs) i lista = do
-     if([x] == ",") then do 
+     if([x] == "*") then do 
          listaLivros xs (i ++ [x])lista
-     else if( [x] /= "," && [x] /= "") then do
+     else if( [x] /= "*" && [x] /= "") then do
          listaLivros xs "" (lista ++[i])
      else 
          lista ++ [i]
-
 
 -- "A" Para alugado e "N" Para não alugado 
 aluga :: String -> [String] -> String -> String
@@ -49,20 +76,20 @@ atualiza nome status (x:titulos) (a:alugados) = do
     
 main = do 
      print "Menu"
+     putStrLn("1 - Cadastra Livro ")
+     putStrLn("2 - Lista Livros ")
+     putStrLn("3 - Aluga Livros ")
      op <- getLine
      if (op == "1") then do
          putStrLn "CADASTRO DE LIVRO - Digite o nome do livro que deseja cadastrar:"
          nome <- getLine
          autor<- getLine
          editora <- getLine
-         cadastra nome autor editora
+         alugado <- getLine
+         cadastra nome autor editora alugado
          
      else if( op == "2") then do
-         putStrLn "DEVOLUÇÃO DE LIVRO - Digite o nome do livro que deseja devolver:"
-         nome <- getLine
-         let aa = remove nome
-         print aa
-         
+         listagemLivros
      else if( op=="3") then do
          putStrLn "ALUGUEL DE LIVROS - Digite o nome do livro que deseja alugar:"
          (x:xs) <- readFile ("titulos.txt")
