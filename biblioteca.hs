@@ -8,6 +8,17 @@ cadastra nome autor editora = do
 remove :: String -> Bool
 remove livro = True
 
+
+-- "A" Para alugado e "N" Para não alugado 
+aluga :: String -> [String] -> String -> String
+aluga nome [] [] = ""
+aluga nome [""] "" = ""
+aluga nome (head:titulos) (tail:alugados) 
+             | (nome == head) = "A" ++ aluga nome titulos alugados 
+             | (nome /= head) = "N" ++ aluga nome titulos alugados
+             | otherwise = [tail] ++ aluga nome titulos alugados
+
+
 main = do 
      print "PUTA"
      op <- getLine
