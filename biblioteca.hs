@@ -8,6 +8,17 @@ cadastra nome autor editora = do
 remove :: String -> Bool
 remove livro = True
 
+listaLivros:: String -> String -> [String] -> [String]
+listaLivros [] nome [] = []
+listaLivros [] nome lista = lista ++ [nome]
+listaLivros (x:xs) i lista = do
+     if([x] == "*") then do 
+         listaLivros xs (i ++ [x])lista
+     else if( [x] /= "*" && [x] /= "") then do
+         listaLivros xs "" (lista ++[i])
+     else 
+         lista ++ [i]
+
 
 -- "A" Para alugado e "N" Para não alugado 
 aluga :: String -> [String] -> String -> String
