@@ -20,7 +20,7 @@ aluga nome (head:titulos) (tail:alugados)
 
 
 main = do 
-     print "PUTA"
+     print "Menu"
      op <- getLine
      if (op == "1") then do
          putStrLn "CADASTRO DE LIVRO - Digite o nome do livro que deseja cadastrar:"
