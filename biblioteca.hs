@@ -19,8 +19,6 @@ listagemLivros = do
       let (nomeLivro:outrosLivros) = listaLivros(a:as) "" []
       let (autor:outroAutores) = listaLivros (b:bs) "" []
       let (editora:outraEditora) = listaLivros(c:cs) "" []
-  
- 
       imprime (nomeLivro:outrosLivros) (autor:outroAutores) (editora:outraEditora)
      
  
@@ -60,7 +58,7 @@ reescreve :: IO()
 reescreve = writeFile "alugados.txt" ("")
  
 reescreveArquivo ::[String] -> IO()
-reescreveArquivo [] = putStrLn "Lista vazia"
+reescreveArquivo [] = putStrLn "Devoluçao realiza com sucesso, você não possui mais pendencias!"
 reescreveArquivo (x:xs) = do
       escreveFileAlugados x
       reescreveArquivo xs
@@ -86,14 +84,17 @@ main = do
          cadastra nome autor editora
          
      else if( op == "2") then do
-     
+         putStrLn "LISTAGEM DE LIVROS"
          listagemLivros
+         putStrLn " "
      else if( op=="3") then do
-         putStrLn "ALUGUEL DE LIVROS - Digite o nome do livro que deseja alugar:"
+         putStrLn "ALUGUEL DE LIVROS - Digite o nome do livro que deseja alugar: "
          alugado <- getLine
          escreveFileAlugados alugado
          putStrLn "Livro alugado com sucesso!"
+         putStrLn " "
      else if (op =="4") then do
+         putStrLn "DEVOLUÇAO LIVROS - Digite o livro que deseja devolver: "
          devolvido <- getLine
          (x:xs) <- readFile "alugados.txt"
          let livros = listaLivros (x:xs) "" []
@@ -102,7 +103,8 @@ main = do
          a <- removeFile "alugados.txt"
          reescreve
          reescreveArquivo result
-     else do
+         putStrLn " "
+     else do 
            a <- readFile "autores.txt"
            print a
            putStrLn "BUSCA DE LIVRO - Digite nome do livro a ser procurado:"
