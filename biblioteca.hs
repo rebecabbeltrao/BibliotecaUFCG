@@ -28,6 +28,7 @@ imprime (livro:outrosLivros) (autor:outroAutores) (editora:outraEditora) = do
       putStrLn ("Nome Livro: " ++ livro)
       putStrLn ("Autor: " ++ autor)
       putStrLn ("Editora: " ++ editora)
+      putStrLn (" ")
       imprime outrosLivros outroAutores outraEditora
      
 listaLivros:: String -> String -> [String] -> [String]
@@ -58,7 +59,7 @@ reescreve :: IO()
 reescreve = writeFile "alugados.txt" ("")
  
 reescreveArquivo ::[String] -> IO()
-reescreveArquivo [] = putStrLn "Devoluçao realiza com sucesso, você não possui mais pendencias!"
+reescreveArquivo [] = putStrLn ""
 reescreveArquivo (x:xs) = do
       escreveFileAlugados x
       reescreveArquivo xs
@@ -66,12 +67,13 @@ reescreveArquivo (x:xs) = do
 -----------------------------
 main:: IO()
 main = do
-     print "Menu"
+     putStrLn "Menu"
      putStrLn("1 - Cadastra Livro ")
      putStrLn("2 - Lista Livros ")
      putStrLn("3 - Aluga Livros ")
      putStrLn("4 - Devolução")
-     
+     putStrLn(" ")
+     putStrLn("Por favor, informe a sua escolha: ")
      op <- getLine
      if (op == "1") then do
          putStrLn "CADASTRO DE LIVRO - Digite o nome do livro que deseja cadastrar:"
@@ -82,7 +84,7 @@ main = do
          putStrLn "Informe a Editora do Livro: "
          editora <- getLine
          cadastra nome autor editora
-         
+         putStrLn(" ")
      else if( op == "2") then do
          putStrLn "LISTAGEM DE LIVROS"
          listagemLivros
@@ -105,7 +107,5 @@ main = do
          reescreveArquivo result
          putStrLn " "
      else do 
-           a <- readFile "autores.txt"
-           print a
-           putStrLn "BUSCA DE LIVRO - Digite nome do livro a ser procurado:"
+          putStrLn ("Opção invalida, por favor selecione alguma das opções disponiveis!")
      main
