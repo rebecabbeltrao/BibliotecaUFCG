@@ -1,11 +1,9 @@
-
-
-cadastra:: String -> String -> String -> String -> IO()
-cadastra nome autor editora alugado = do
+cadastra:: String -> String -> String -> IO()
+cadastra nome autor editora = do
  appendFile "titulos.txt" (nome++ ",")
  appendFile "autores.txt" (autor ++ ",")
  appendFile "editora.txt" (editora ++ ",")
- appendFile "alugados.txt" (alugado ++ "N")
+ appendFile "alugados.txt" ("")
 
 
 listagemLivros = do
@@ -46,46 +44,32 @@ listaLivros (x:xs) i lista = do
          listaLivros xs "" (lista ++[i])
      else 
          lista ++ [i]
-
-
--- "A" Para alugado e "N" Para não alugado 
-aluga :: String -> [String] -> String -> String
-aluga nome [] [] = ""
-aluga nome [""] "" = ""
-aluga nome (head:titulos) (tail:alugados) 
-             | (nome == head) = "A" ++ aluga nome titulos alugados 
-             | (nome == "") = "" ++ aluga nome titulos alugados
-             | otherwise = [tail] ++ aluga nome titulos alugados
-
--- devolução 
-devolucao :: String -> [String] -> String -> String
-devolucao nome [] [] = ""
-devolucao nome [""] "" = ""
-devolucao nome (head:titulos) (tail:alugados) 
-             | (nome == head) = "N" ++ aluga nome titulos alugados 
-             | (nome == "") = "" ++ aluga nome titulos alugados
-             | otherwise = [tail] ++ aluga nome titulos alugados
-
+------------------------------------------------------------------
+escreveFileAlugados :: String -> IO()
+escreveFileAlugados alugado = do
+  appendFile "alugados.txt" (alugado++ ",")
 
 -- atualiza (salva nomes na lista)
-atualiza :: String -> String -> [String] -> [String] -> [String]
-atualiza nome status [""] [""] = []
-atualiza nome status (x:titulos) (a:alugados) = do 
+atualiza :: String -> [String] -> [String]
+atualiza nome [""] = []
+atualiza nome (x:alugados) = do 
          if(nome /= x ) then do
-             [x] ++  atualiza nome status titulos alugados
+             [x] ++  atualiza nome alugados
           else 
-              status ++ atualiza nome status titulos alugados
+             atualiza nome alugados
 
 reescreve :: IO()
-reescreve = do 
-     writeFile "titulos.txt" ("")
-     writeFile "autores.txt" ("")
-     writeFile "editora.txt" ("")
-     
--- alice A listadeT listA
+reescreve = writeFile "alugados.txt" ("")
 
+reescreveArquivo ::[String] -> IO()
+reescreveArquivo [] = putStrLn "Lista vazia"
+reescreveArquivo[""] = putStrLn "Lista vazia"
+reescreveArquivo (x:xs) = do
+      escreveFileAlugados x 
+      reescreveArquivo xs
 
-
+-----------------------------
+main:: IO()
 main = do 
      print "Menu"
      putStrLn("1 - Cadastra Livro ")
@@ -100,19 +84,23 @@ main = do
          autor<- getLine
          editora <- getLine
          alugado <- getLine
-         cadastra nome autor editora alugado
+         cadastra nome autor editora
          
      else if( op == "2") then do
          listagemLivros
      else if( op=="3") then do
         -- putStrLn "ALUGUEL DE LIVROS - Digite o nome do livro que deseja alugar:"
-         (x:xs) <- readFile "titulos.txt"
-         (w:ws) <- readFile "alugados.txt"
-         nome <- getLine
          alugado <- getLine
-         let list = atualiza nome alugado (listaLivros (x:xs) "" []) (listaLivros (w:ws) "" [])
-         reescreve
-         print list
+         escreveFileAlugados alugado
+     else if (op =="4") then do
+          devolvido <- getLine
+          (x:xs) <- readFile "atualizados.txt"
+          let result = atualiza devolvido (listaLivros (x:xs) "" []) 
+         -- let result = ["a"]
+		 -- a <- removeFile "alugados.txt"
+          reescreve 
+          reescreveArquivo result
+          print "cu"
      else do
            a <- readFile "autores.txt"
            print a
