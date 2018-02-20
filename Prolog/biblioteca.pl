@@ -1,5 +1,16 @@
 :- initialization (main).
 
+cadastraTitulo([],Titulo,[Titulo]).
+cadastraTitulo([X|Y],Titulo,[X|Z]) :- cadastraTitulo(Y,Titulo,Z).
+
+cadastraAutor([],Autor,[Autor]).
+cadastraAutor([X|Y],Autor,[X|Z]) :- cadastraAutor(Y, Autor, Z).
+
+
+cadastraEditora([],Editora,[Editora]).
+cadastraEditora([X|Y],Editora,[X|Z]) :- cadastraEditora(Y,Editora,Z).
+
+
 cadastraTitulo(Titulo) :- write("bababab").
 cadastraAutor(Autor) :- write("assdsds").
 cadastraEditora(Editora) :- write("wshdhdhwdj").
