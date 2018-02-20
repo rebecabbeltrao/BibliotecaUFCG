@@ -50,7 +50,9 @@ listagemAlugados([HEAD|TAIL]) :-
 runOption(5):- 
 write("DEVOLUÇAO LIVROS - Digite o livro que deseja devolver: "), nl,
 read(LivroDevolver), 
-write("Livro devolvido com sucesso!" ), nl.
+call(alugado(LivroDevolver,_)),!, retract(alugado(LivroDevolver,X)),
+write("Livro devolvido com sucesso!"), nl.
+
 main:-
 nl,
 write(" BEM VINDO A BIBLIOTECA UFCG"), nl,
