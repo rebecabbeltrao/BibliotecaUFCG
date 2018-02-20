@@ -1,13 +1,16 @@
 :- initialization (main).
 
 listagemLivro([]):- main.
-listagemLivro([HEAD|TAIL]):- write("Titulo: "),nl,
+
+listagemLivro([HEAD|TAIL]):- nl, write("Titulo: "),
 write(HEAD), nl,
-livro(HEAD,Autor,Editora), 
+livro(HEAD,Autor,Editora, Ano), 
 write("Autor:"),
 write(Autor), nl,
 write("Editora: "),
 write(Editora),nl,
+write("Ano: "),
+write(Ano), nl,
 listagemLivro(TAIL).
 
 runOption(1) :- 
@@ -17,29 +20,31 @@ runOption(1) :-
  read(Autor), 
  write("Informe a Editora do Livro: "), nl,
  read(Editora),
- assertz(livro(Titulo, Autor, Editora)).
+ write("Informe o Ano do Livro: "), nl,
+ read(Ano),
+ assertz(livro(Titulo, Autor, Editora, Ano)).
 
 runOption(2) :-
  write("LISTAGEM DE LIVROS"), nl,
- findall(A,livro(A,B,C),Lista),
+ findall(A,livro(A,B,C,D),Lista),
  listagemLivro(Lista).
 
 runOption(3) :- 
 write("ALUGUEL DE LIVROS - Digite o nome do livro que deseja alugar: "), nl,
 read(T), 
-assertz(alugado(T)),
+assertz(alugado(T,S)),
 write("Livro alugado com sucesso!"), nl.
 
 runOption(4):-
 write("LISTAGEM DE LIVROS ALUGADOS"), nl,
-findall(A,alugado(A),Lista),
+findall(A,alugado(A,S),Lista),
 listagemAlugados(Lista).
 
 listagemAlugados([]):- main.
 listagemAlugados([HEAD|TAIL]) :-
 	write("Titulo : "),
 	write(HEAD), nl,
-	alugado(HEAD),
+	alugado(HEAD,S),
 	write("Status: Alugado"),nl,
 	listagemAlugados(TAIL).
 	
@@ -47,34 +52,34 @@ listagemAlugados([HEAD|TAIL]) :-
 runOption(5):- 
 write("DEVOLUÇAO LIVROS - Digite o livro que deseja devolver: "), nl,
 read(LivroDevolver),
-call(alugado(LivroDevolver)),!,
-retract(alugado(LivroDevolver)),
+call(alugado(LivroDevolver,_)),!,
+retract(alugado(LivroDevolver,X)),
 write("Livro devolvido com sucesso!"). 
 
 
 runOption(6):- write("BUSCA LIVROS CADASTRADOS"),nl,
-write("Digite o titulo do livro: "), nl,
+write("Digite o titulo do Livro: "), nl,
 read(Titulo), 
-write("Digite o autor: "),nl,
+write("Digite o Autor: "),nl,
 read(Autor),
-write("Digite a editora: "),nl,
+write("Digite a Editora: "),nl,
 read(Editora),
-findall(A, livro(A,B,C), Lista),
+write("Digite o Ano: "),nl,
+read(Ano),
+findall(A, livro(A,B,C,D), Lista),
 buscaLivro(Titulo, Lista).
 
 runOption(7):- write("BUSCA LIVROS ALUGADOS"),nl,
 write("Digite o titulo do livro: "), nl,
 read(Titulo),
-findall(A, alugado(A), Lista1),
-findall(A,livro(A,B,C), Lista2),
+findall(A, alugado(A,S), Lista1),
 buscaAlugado(Titulo, Lista1).
-buscaLivro(Titulo, Lista2).
 
 buscaAlugado(Titulo, Lista) :- pertence(Titulo, Lista), write("Livro se encontra alugado"), nl.
-buscaAlugado(Titulo, Lista) :- write("Livro não alugado"), nl.
+buscaAlugado(Titulo, Lista) :- write("Livro nao alugado"), nl.
 
 buscaLivro(Titulo, Lista):- pertence(Titulo,Lista), write("livro cadastrado"),nl.
-buscaLivro(Titulo, Lista):- write("livro não cadastrado"),nl.
+buscaLivro(Titulo, Lista):- write("livro nao cadastrado"),nl.
 
 pertence(A,B) :- B = [A|_].
 pertence(A,B) :- B = [_|C], pertence(A,C).
@@ -94,5 +99,4 @@ write("Por favor, informe a sua escolha: "), nl,
 read(Option),
 runOption(Option), main.
 
-halt(0).
 
