@@ -27,19 +27,19 @@ runOption(2) :-
 runOption(3) :- 
 write("ALUGUEL DE LIVROS - Digite o nome do livro que deseja alugar: "), nl,
 read(T), 
-assertz(alugado(T,S)),
+assertz(alugado(T)),
 write("Livro alugado com sucesso!"), nl.
 
 runOption(4):-
 write("LISTAGEM DE LIVROS ALUGADOS"), nl,
-findall(A,alugado(A,S),Lista),
+findall(A,alugado(A),Lista),
 listagemAlugados(Lista).
 
 listagemAlugados([]):- main.
 listagemAlugados([HEAD|TAIL]) :-
 	write("Titulo : "),
 	write(HEAD), nl,
-	alugado(HEAD,S),
+	alugado(HEAD),
 	write("Status: Alugado"),nl,
 	listagemAlugados(TAIL).
 	
@@ -47,8 +47,8 @@ listagemAlugados([HEAD|TAIL]) :-
 runOption(5):- 
 write("DEVOLUÇAO LIVROS - Digite o livro que deseja devolver: "), nl,
 read(LivroDevolver),
-call(alugado(LivroDevolver,_)),!,
-retract(alugado(LivroDevolver,X)),
+call(alugado(LivroDevolver)),!,
+retract(alugado(LivroDevolver)),
 write("Livro devolvido com sucesso!"). 
 
 
@@ -65,7 +65,7 @@ buscaLivro(Titulo, Lista).
 runOption(7):- write("BUSCA LIVROS ALUGADOS"),nl,
 write("Digite o titulo do livro: "), nl,
 read(Titulo),
-findall(A, alugado(A,S), Lista1),
+findall(A, alugado(A), Lista1),
 findall(A,livro(A,B,C), Lista2),
 buscaAlugado(Titulo, Lista1).
 buscaLivro(Titulo, Lista2).
