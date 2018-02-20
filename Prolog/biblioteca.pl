@@ -29,14 +29,28 @@ runOption(2) :-
 
 runOption(3) :- 
 write("ALUGUEL DE LIVROS - Digite o nome do livro que deseja alugar: "), nl,
-read(LivroAlugar), 
+read(T), 
+assertz(alugado(T,S)),
+S = "alugado",
 write("Livro alugado com sucesso!"), nl.
 
 runOption(4):-
+write("LISTAGEM DE LIVROS ALUGADOS"), nl,
+findall(A,alugado(A,S),Lista),
+listagemAlugados(Lista).
+
+listagemAlugados([]):- main.
+listagemAlugados([HEAD|TAIL]) :-
+	write("Titulo : "), nl,
+	write(HEAD), nl,
+	alugado(HEAD,S),
+	write("Status: Alugado"),
+	listagemAlugados(TAIL).
+
+runOption(5):- 
 write("DEVOLUÇAO LIVROS - Digite o livro que deseja devolver: "), nl,
 read(LivroDevolver), 
 write("Livro devolvido com sucesso!" ), nl.
-
 main:-
 nl,
 write(" BEM VINDO A BIBLIOTECA UFCG"), nl,
@@ -44,7 +58,8 @@ write("MENU"),nl,
 write("1 - Cadastra Livro "),nl,
 write("2 - Lista Livros "),nl,
 write("3 - Aluga Livros "),nl,
-write("4 - Devolução"),nl,
+write("4 - Lista Livros Alugados"),nl,
+write("5 - Devolução"), nl,
 write("Por favor, informe a sua escolha: "), nl,
 read(Option),
 runOption(Option), main.
