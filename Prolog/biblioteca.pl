@@ -1,14 +1,33 @@
 :- initialization (main).
 
-fato(Option):- write(Option).
+cadastraTitulo(Titulo) :- write("bababab").
+cadastraAutor(Autor) :- write("assdsds").
+cadastraEditora(Editora) :- write("wshdhdhwdj").
 
 runOption(1) :- 
  write("CADASTRO DE LIVRO - Digite o nome do livro que deseja cadastrar:"),nl,
  read(Titulo),
+ cadastraTitulo(Titulo),
  write("Informe o Autor do Livro: "),nl,
  read(Autor), 
+ cadastraAutor(Autor),
  write("Informe a Editora do Livro: "), nl,
- read(Editora).
+ read(Editora),
+ cadastraEditora(Editora).
+ 
+
+runOption(2) :-
+ write("LISTAGEM DE LIVROS"), nl.
+
+runOption(3) :- 
+write("ALUGUEL DE LIVROS - Digite o nome do livro que deseja alugar: "), nl,
+read(LivroAlugar), 
+write( "Livro alugado com sucesso!"), nl.
+
+runOption(4):-
+write("DEVOLUÇAO LIVROS - Digite o livro que deseja devolver: "), nl,
+read(LivroDevolver), 
+write("Livro devolvido com sucesso!" ), nl.
 
 main:-
 nl,
