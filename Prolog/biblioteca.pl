@@ -29,12 +29,11 @@ write("ALUGUEL DE LIVROS - Digite o nome do livro que deseja alugar: "), nl,
 	read(Autor),
 	call(livro(Titulo,Autor,_,_)),!,
 	aluga(Titulo, Autor);
-	write("Livro nao cadastrado.").
-
+	write("Impossivel efetuar aluguel pois o livro nao esta cadastrado.").
 
 runOption(4):-
 write("LISTAGEM DE LIVROS ALUGADOS"), nl,
-	findall(Livro,alugado(Livro, Autor),Lista),
+	findall(Livro,alugado(Livro, _),Lista),
 	listagemAlugados(Lista).
 
 runOption(5):- 
@@ -71,8 +70,8 @@ runOption(_):- write("opcao invalida"),main.
 devolve(Titulo, Autor):- 	
 	call(alugado(Titulo, Autor)),!,
 	retract(alugado(Titulo, Autor)),
-	write("Livro devolvido com sucesso!");
-	write("Livro nao devolvido.").
+	write("Livro devolvido com sucesso.");
+	write("Livro nao encontra-se alugado, impossivel efetuar devolucao.").
 	
 %---------------- lista livro alugado -------------------------------------	
 listagemAlugados([]):- main.
@@ -87,8 +86,8 @@ listagemAlugados([HEAD|TAIL]) :-
 
 %-------------------------busca alugado---------------------------
 buscaAlugado(Titulo,Autor):- call(alugado(Titulo,Autor)),!,
-	write("Livro ja esta alugado.");
-	write("Livro disponivel para aluguel").
+	write("Livro encontra-se alugado.");
+	write("Livro disponivel para aluguel.").
 	
 %--------------- lista livros alugados ----------------------------------	
 listagemLivro([]):- main.
@@ -105,9 +104,9 @@ listagemLivro([]):- main.
 	
 %----------- aluga livro -----------------------------------------------	
 aluga(Titulo, Autor):- call(alugado(Titulo, Autor)),!,
-	write("Livro indisponivel para aluguel");
+	write("Livro ja encontra-se alugado, impossível efetuar o aluguel.");
 	assertz(alugado(Titulo, Autor)),
-	write("Livro alugado com sucesso").	
+	write("Livro alugado com sucesso.").	
 
 main:-
 nl,
