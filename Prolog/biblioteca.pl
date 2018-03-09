@@ -87,7 +87,7 @@ listagemAlugados([HEAD|TAIL]) :-
 %-------------------------busca alugado---------------------------
 buscaAlugado(Titulo,Autor):- call(alugado(Titulo,Autor)),!,
 	write("Livro encontra-se alugado.");
-	write("Livro disponivel para aluguel.").
+	write("Livro nao alugado ou nao cadastrado.").
 	
 %--------------- lista livros alugados ----------------------------------	
 listagemLivro([]):- main.
